@@ -1,3 +1,5 @@
+<img width="1494" height="818" alt="image" src="https://github.com/user-attachments/assets/c23576d7-87c8-476e-969a-2390f897173c" />
+
 # JCollateral Smart Contracts
 
 ## Project Overview
