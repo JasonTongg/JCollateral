@@ -1,66 +1,107 @@
-## Foundry
+# JCollateral Smart Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Project Overview
 
-Foundry consists of:
+This repository contains the **smart contracts** for **JCollateral**, a decentralized collateral management and lending protocol.  
+The contracts define the core on-chain logic for collateral deposits, borrowing against collateral, managing debt positions, and handling liquidations in a decentralized manner.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+These contracts are written in **Solidity** and developed using **Foundry**, a fast and modular toolkit for Ethereum application development.
 
-## Documentation
+- **Live Product:** [JCollateral](https://jcollateral.vercel.app/)
+- **Frontend using Nextjs:** [JCollateral Frontend](https://github.com/JasonTongg/JCollateral_Frontend)
 
-https://book.getfoundry.sh/
+## Protocol Summary
 
-## Usage
+JCollateral enables users to:
 
-### Build
+- Deposit supported collateral assets
+- Borrow against deposited collateral
+- Repay borrowed assets to unlock collateral
+- View and manage positions on-chain
+- Enable automated or incentive-based liquidation for under-collateralized positions
 
-```shell
-$ forge build
-```
+This repository includes all protocol logic required to enforce safe, composable, and permissionless lending operations.
 
-### Test
+## Contracts Description
 
-```shell
-$ forge test
-```
+### `Jcol.sol`
 
-### Format
+**Role:** Core token and system state contract
 
-```shell
-$ forge fmt
-```
+`Jcol.sol` acts as the central contract of the protocol. It is responsible for:
 
-### Gas Snapshots
+- Managing the protocol’s base token logic
+- Tracking balances and internal accounting
+- Acting as a shared dependency for lending and exchange operations
+- Serving as the primary contract referenced by other modules
 
-```shell
-$ forge snapshot
-```
+This contract provides the foundational state that other contracts rely on to execute lending and exchange logic safely.
 
-### Anvil
+### `Lending.sol`
 
-```shell
-$ anvil
-```
+**Role:** Collateralized lending and borrowing engine
 
-### Deploy
+`Lending.sol` implements the core **collateralized lending logic** of JCollateral. Its responsibilities include:
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+- Accepting collateral deposits (e.g. ETH)
+- Allowing users to borrow against deposited collateral
+- Enforcing collateralization rules
+- Handling repayment flows
+- Tracking user debt positions
 
-### Cast
+This contract ensures users remain sufficiently collateralized and prevents unsafe borrowing behavior.
 
-```shell
-$ cast <subcommand>
-```
+### `JcolDEX.sol`
 
-### Help
+**Role:** Internal DEX / swap mechanism (testing & demo)
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+`JcolDEX.sol` provides a **simple decentralized exchange mechanism** used within the JCollateral ecosystem. It is primarily intended for:
+
+- Swapping between protocol assets
+- Simulating market activity
+- Supporting testing and frontend demonstrations
+
+This contract is **not designed to replace a production-grade AMM**, but rather to support local liquidity flows within the protocol.
+
+### `MovePrice.sol`
+
+**Role:** Price movement and oracle simulation
+
+`MovePrice.sol` is used to **manually or programmatically adjust prices** within the system. Its primary purpose is:
+
+- Simulating market price changes
+- Testing liquidation scenarios
+- Demonstrating how price movements affect collateral ratios
+
+This contract is especially useful for development, testing, and educational demonstrations where external oracle dependencies are intentionally avoided.
+
+## Protocol Flow Summary
+
+1. Users deposit collateral through `Lending.sol`
+2. Borrowing power is calculated based on system pricing
+3. Prices can be adjusted using `MovePrice.sol`
+4. Assets can be swapped internally using `JcolDEX.sol`
+5. Repayments and collateral withdrawals are enforced by lending rules
+
+
+## Technology Stack
+
+- **Language:** Solidity ^0.8.x
+- **Development Framework:** Foundry
+- **Testing:** Forge
+- **Deployment:** Forge scripts
+- **Network:** ETH Sepolia
+
+## Security Notes
+- This project is not audited
+- Intended for testing, learning, and demonstration
+- Do not deploy to mainnet without a full audit
+- Price logic is intentionally simplified
+
+## Author  
+
+**Jason Tong**  
+
+- **Product:** [JCollateral](https://jcollateral.vercel.app/)
+- **GitHub:** [JasonTongg](https://github.com/JasonTongg).
+- **Linkedin:** [Jason Tong](https://www.linkedin.com/in/jason-tong-42600319a/).
